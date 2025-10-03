@@ -4,7 +4,6 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { InputYAMLSchema, PlanSchema, validatePlan } from '@/lib/schemas';
 import { generatePlan } from '@/lib/llm';
-import { generatePDF } from '@/lib/pdf';
 import { randomUUID } from 'crypto';
 
 export async function POST(request: NextRequest) {
@@ -52,24 +51,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let pdfUrl: string | undefined;
-    if (options?.pdf) {
-      try {
-        const planId = randomUUID();
-        const pdfDir = path.join(process.cwd(), 'public', 'pdfs');
-        const pdfPath = path.join(pdfDir, `${planId}.pdf`);
-        await generatePDF(llmResponse.markdown, pdfPath);
-        pdfUrl = `/pdfs/${planId}.pdf`;
-      } catch (error: any) {
-        console.error('PDF generation failed:', error);
-      }
-    }
-
     return NextResponse.json({
       id: randomUUID(),
       json: validatedPlan,
       markdown: llmResponse.markdown,
-      pdf_url: pdfUrl,
     });
   } catch (error: any) {
     return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 });

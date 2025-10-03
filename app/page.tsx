@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { generatePDFClient } from '@/lib/pdfClient';
 
 const EXAMPLE_YAML = `client:
   business_name: "Green Fork"
@@ -30,7 +31,6 @@ export default function Home() {
   const [error, setError] = useState('');
   const [result, setResult] = useState<PlanResponse | null>(null);
   const [showJson, setShowJson] = useState(false);
-  const [generatePdf, setGeneratePdf] = useState(true);
 
   const loadExample = () => {
     setYamlInput(EXAMPLE_YAML);
@@ -65,7 +65,6 @@ export default function Home() {
           yaml_input: yamlInput,
           options: {
             dry_run: false,
-            pdf: generatePdf,
           },
         }),
       });
@@ -109,8 +108,8 @@ export default function Home() {
   };
 
   const downloadPdf = () => {
-    if (!result?.pdf_url) return;
-    window.open(result.pdf_url, '_blank');
+    if (!result) return;
+    generatePDFClient(result.markdown, `plan-${result.id}.pdf`);
   };
 
   const showToast = (message: string, type: 'success' | 'error') => {
@@ -162,18 +161,6 @@ export default function Home() {
               placeholder="Paste your YAML here..."
             />
 
-            <div className="mt-4 flex items-center gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={generatePdf}
-                  onChange={(e) => setGeneratePdf(e.target.checked)}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm text-gray-700">Generate PDF</span>
-              </label>
-            </div>
-
             <div className="mt-6 flex gap-3">
               <button
                 onClick={validateYaml}
@@ -216,14 +203,12 @@ export default function Home() {
                   >
                     Markdown
                   </button>
-                  {result.pdf_url && (
-                    <button
-                      onClick={downloadPdf}
-                      className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md transition"
-                    >
-                      PDF
-                    </button>
-                  )}
+                  <button
+                    onClick={downloadPdf}
+                    className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md transition"
+                  >
+                    PDF
+                  </button>
                 </div>
               )}
             </div>
