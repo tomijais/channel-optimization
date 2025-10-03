@@ -1,4 +1,4 @@
-# Channel Optimization Tool - Next.js (Updated 10/03 - 2:30p)
+# Channel Optimization Tool - Next.js (Updated 10/03 - 6:30p)
 
 ## What it does
 
@@ -92,8 +92,3 @@ This would result in more effective media plans, a higher return on investment (
 ### Proof of Concept (POC)
 
 Given the 24-hour time constraint of this project, we have used a general-purpose model from OpenAI to demonstrate the core functionality of the application. This model is less powerful and less sustainable for a production environment, but it serves as a proof of concept to showcase the potential of this tool. With more time and resources, the next step would be to train and integrate a custom fine-tuned model to unlock the full potential of this application.
-
-## Naming Conventions
-
-*   **Repo/Zip File:** `SchoolAcronym_TECH_Date.FileType` (e.g., `SEU_TECH_10022025.zip`)
-*   **README:** `README.md` (Updated MM/DD - HH:MMa/p)
